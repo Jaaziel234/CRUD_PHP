@@ -31,8 +31,6 @@ if ($_POST) {
     $sentencia->bindParam(":fechadeingreso", $fechadeingreso);
     $sentencia->execute();
 
-   
-
 }
 
 $sentencia = $conexion->prepare("SELECT * FROM tbl_puestos");
