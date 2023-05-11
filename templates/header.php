@@ -5,7 +5,7 @@ $url_base="http://localhost/APPWEB/";
 <html lang="en">
 
 <head>
-  <title>DASHBOARD</title>
+  <title>INICIO</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -20,13 +20,14 @@ $url_base="http://localhost/APPWEB/";
   <header>
     <!-- place navbar here -->
   </header>
-  <nav class="navbar navbar-expand navbar-light bg-light">
+  <nav class="navbar navbar-expand navbar-dark bg-dark">
         <ul class="nav navbar-nav">
             <li class="nav-item">
-                <a class="nav-link active" href="#" aria-current="page">CODIGOZOOM<span class="visually-hidden">(current)</span></a>
+                <a class="nav-link active" href="../../index.php" aria-current="page">CODIGOZOOM<span class="visually-hidden">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="<?php echo $url_base;?>secciones/empleados/">Empleados</a> <!-- con $url_base aplicamos una URL absoluta -->
+                <i class="bi bi-people-fill"></i>
                 <!-- <a class="nav-link" href="secciones/empleados/">Empleados</a> -->
             </li>
             <li class="nav-item">

@@ -25,6 +25,7 @@ $sentencia = $conexion->prepare("SELECT * FROM tbl_usuarios");
 $sentencia->execute();
 
 $lista_tbl_usuarios = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <?php include("../../templates/header.php");?>
@@ -57,7 +58,8 @@ $lista_tbl_usuarios = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                         <tr class="">
                             <td scope="row"><?php  echo $registro['id'];?></td>
                             <td><?php  echo $registro['usuario'];?></td>
-                            <td><?php  echo $registro['password'];?></td>
+                            <!-- <td><?php  echo $registro['password'];?></td> --> 
+                            <td><?php echo str_repeat("*", strlen($registro['password'])); ?></td>
                             <td><?php  echo $registro['correo'];?></td>
                             <!-- <td>Programador sr</td> -->
                             <td>

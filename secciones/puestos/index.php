@@ -18,14 +18,9 @@ if (isset($_GET['txtID'])) {  //si recibimos ese dato
     header("Location:index.php");
 }
 
-
-
-
 $sentencia = $conexion->prepare("SELECT * FROM tbl_puestos");
-
 //VAMOS A EJECUTAR ESTA INSTRUCCION
 $sentencia->execute();
-
 $lista_tbl_puestos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
 /* print_r($lista_tbl_puestos); */

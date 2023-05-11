@@ -1,3 +1,37 @@
+<?php
+include("../../bd.php");
+
+/* cuando vamos a eliminar el registro necesitamos que el id de eliminacion 
+de registro no aparezca en la URL es por ello que realizamos lo sigiente */
+
+if (isset($_GET['txtID'])) {  //si recibimos ese dato
+    # code...
+    $txtID=(isset($_GET['txtID']))?$_GET['txtID']:""; // vamos a alamcenar el id
+
+    //vamos a ocupar la instruccion prepare
+    $sentencia=$conexion->prepare("DELETE FROM tbl_empleados WHERE id=:id");
+    //asignando los valores que tiene el metodo POST (los que vienen del formulario)
+    $sentencia->bindParam(":id", $txtID); //parametro para borrado
+    $sentencia->execute(); //eliminamos
+
+    //redireccionaremos al index
+    header("Location:index.php");
+} 
+
+//vamos a trabajar con una subconsulta para mostrar el nombre del puesto.
+$sentencia = $conexion->prepare("SELECT *,
+(SELECT nombredelpuesto 
+FROM tbl_puestos 
+WHERE tbl_puestos.id=tbl_empleados.idpuesto limit 1) as puesto /* Le decimos que toda la consulta de puesto equivalea a: puesto mostrada como 1 registro */
+FROM `tbl_empleados`");
+//VAMOS A EJECUTAR ESTA INSTRUCCION
+$sentencia->execute();
+$lista_tbl_empleados = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
+?>
+
+
+
 <?php include("../../templates/header.php");?>
 
 <div class="title mt-4">
@@ -16,7 +50,9 @@
             <table class="table">
                 <thead>
                     <tr>
+                    <th scope="col">ID</th>
                         <th scope="col">Nombre</th>
+                        <th scope="col">Apellidos</th>
                         <th scope="col">Foto</th>
                         <th scope="col">CV</th>
                         <th scope="col">Puesto</th>
@@ -25,18 +61,31 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="">
-                        <td scope="row">Oscar Uh</td>
-                        <td>imagen.jpg</td>
-                        <td>CV.pfd</td>
-                        <td>Programador sr</td>
-                        <td>12/12/2023</td>
-                        <td>
-                            <a name="" id="" class="btn btn-primary" href="#" role="button">Carta</a>
-                            <a name="" id="btneditar" class="btn btn-info" href="#" role="button">Editar</a>
-                            <a name="" id="btnborrar" class="btn btn-danger" href="#" role="button">Eliminar</a>
-                        </td>
-                    </tr>
+                <?php foreach ($lista_tbl_empleados as $registro) { ?>
+                        <tr class="">
+                            <td scope="row"><?php  echo $registro['id'];?></td>
+                            <td><?php  echo $registro['primernombre'];?>
+                                <?php  echo $registro['segundonombre'];?>
+                            </td>
+                            
+                            <td><?php  echo $registro['primerapellido'];?>
+                                <?php  echo $registro['segundoapellido'];?>
+                            </td>
+                            
+                            <td><?php  echo $registro['foto'];?></td>
+                            <td><?php  echo $registro['cv'];?></td>
+                            <td><?php  echo $registro['puesto'];?></td> <!-- como puesto. Gracias a la subconsulta -->
+                            <td><?php  echo $registro['fechadeingreso'];?></td>
+
+                            <!-- <td>Programador sr</td> -->
+                            <td>
+                                <!-- <a name="" id="btneditar" class="btn btn-info" href="editar.php" role="button">Editar</a> -->
+                                <a class="btn btn-primary" href="#" role="button">Carta</a>
+                                <a class="btn btn-primary" href="editar.php?txtID=<?php  echo $registro['id']; ?>" role="button">Editar</a>
+                                <a class="btn btn-danger" href="index.php?txtID=<?php  echo $registro['id']; ?>" role="button">Eliminar</a>
+                            </td>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>
