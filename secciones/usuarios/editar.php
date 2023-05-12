@@ -9,8 +9,8 @@ if (isset($_GET['txtID'])) {  //si recibimos ese dato
     //vamos a ocupar la instruccion prepare
     $sentencia=$conexion->prepare("SELECT * FROM tbl_usuarios WHERE id=:id");
     //asignando los valores que tiene el metodo POST (los que vienen del formulario)
-    $sentencia->bindParam(":id", $txtID); //parametro para borrado
-    $sentencia->execute(); //eliminamos
+    $sentencia->bindParam(":id", $txtID);
+    $sentencia->execute();
 
     $registro=$sentencia->fetch(PDO::FETCH_LAZY);
     $usuario=$registro["usuario"];

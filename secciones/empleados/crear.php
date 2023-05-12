@@ -25,12 +25,34 @@ if ($_POST) {
     $sentencia->bindParam(":segundonombre", $segundonombre); 
     $sentencia->bindParam(":primerapellido", $primerapellido);
     $sentencia->bindParam(":segundoapellido", $segundoapellido);
-    $sentencia->bindParam(":foto", $foto);
-    $sentencia->bindParam(":cv", $cv);
+
+    $fecha_=new DateTime();//obtenemos el tiempo
+    $nombreArchivo_foto=($foto!='')?$fecha_->getTimestamp()."_".$_FILES["foto"]['name']:""; //armar el nuevo nombre con el tiempo para que no se sobreescriba con otros
+    $tmp_foto=$_FILES["foto"]['tmp_name']; //utilizar un archivo temporal 
+    
+    if($tmp_foto!=''){
+      move_uploaded_file($tmp_foto,"./".$nombreArchivo_foto);// para que podamos mover el archivo temporal a un nuevo destino
+    }
+
+    $sentencia->bindParam(":foto", $nombreArchivo_foto);//actualizamos en la bd ese nombre
+
+    $nombreArchivo_cv=($cv!='')?$fecha_->getTimestamp()."_".$_FILES["cv"]['name']:""; //armar el nuevo nombre con el tiempo para que no se sobreescriba con otros
+    $tmp_cv=$_FILES["cv"]['tmp_name']; //utilizar un archivo temporal 
+    
+    if($tmp_cv!=''){
+      move_uploaded_file($tmp_cv,"./".$nombreArchivo_cv);// para que podamos mover el archivo temporal a un nuevo destino
+    }
+
+    $sentencia->bindParam(":cv", $nombreArchivo_cv);
+
+
+
     $sentencia->bindParam(":idpuesto", $idpuesto);
     $sentencia->bindParam(":fechadeingreso", $fechadeingreso);
     $sentencia->execute();
 
+     //redireccionaremos al index
+     header("Location:index.php");
 }
 
 $sentencia = $conexion->prepare("SELECT * FROM tbl_puestos");

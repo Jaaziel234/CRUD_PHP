@@ -1,9 +1,9 @@
 </main>
- <footer class="bg-dark text-white py-4 mt-4 fixed-bottom">
-  <h1 class="text-center fw-bold">CodigoZoom</h1>
-</footer>
-
-
+<footer class="fixed-bottom bg-primary text-white text-center text-lg-start mt-4">
+ <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    © 2023 Codigozoom.com | Todos los derechos reservados.
+  </div>
+</footer> 
   <!-- Bootstrap JavaScript Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
     integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">

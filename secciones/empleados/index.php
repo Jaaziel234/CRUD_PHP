@@ -4,19 +4,42 @@ include("../../bd.php");
 /* cuando vamos a eliminar el registro necesitamos que el id de eliminacion 
 de registro no aparezca en la URL es por ello que realizamos lo sigiente */
 
-if (isset($_GET['txtID'])) {  //si recibimos ese dato
+if (isset($_GET['txtID'])) { //si recibimos ese dato
     # code...
-    $txtID=(isset($_GET['txtID']))?$_GET['txtID']:""; // vamos a alamcenar el id
+    $txtID = (isset($_GET['txtID']))?$_GET['txtID']:""; // vamos a alamcenar el id
 
-    //vamos a ocupar la instruccion prepare
+    //Buscar el archivo realacionado con el empleado
+    $sentencia = $conexion->prepare("SELECT foto,cv FROM tbl_empleados WHERE id=:id");
+    $sentencia->bindParam(":id", $txtID); 
+    $sentencia->execute();
+    $registro_recuperado = $sentencia->fetch(PDO::FETCH_LAZY);//nos va a devolver un registro
+    /* print_r($registro_recuperado); */
+
+    if(isset($registro_recuperado["foto"]) && $registro_recuperado["foto"]!="")
+    {
+        if(file_exists("./".$registro_recuperado["foto"])){
+            unlink("./".$registro_recuperado["foto"]);
+
+        }
+    }
+
+    if(isset($registro_recuperado["cv"]) && $registro_recuperado["cv"]!="")
+    {
+        if(file_exists("./".$registro_recuperado["cv"])){
+            unlink("./".$registro_recuperado["cv"]);
+
+        }
+    }
+    
+
+
     $sentencia=$conexion->prepare("DELETE FROM tbl_empleados WHERE id=:id");
     //asignando los valores que tiene el metodo POST (los que vienen del formulario)
     $sentencia->bindParam(":id", $txtID); //parametro para borrado
     $sentencia->execute(); //eliminamos
-
     //redireccionaremos al index
     header("Location:index.php");
-} 
+}
 
 //vamos a trabajar con una subconsulta para mostrar el nombre del puesto.
 $sentencia = $conexion->prepare("SELECT *,
@@ -32,7 +55,7 @@ $lista_tbl_empleados = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
 
 
-<?php include("../../templates/header.php");?>
+<?php include("../../templates/header.php"); ?>
 
 <div class="title mt-4">
     <h4>EMPLEADOS</h4>
@@ -50,7 +73,7 @@ $lista_tbl_empleados = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             <table class="table">
                 <thead>
                     <tr>
-                    <th scope="col">ID</th>
+                        <th scope="col">ID</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Apellidos</th>
                         <th scope="col">Foto</th>
@@ -61,35 +84,49 @@ $lista_tbl_empleados = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($lista_tbl_empleados as $registro) { ?>
+                    <?php foreach ($lista_tbl_empleados as $registro) { ?>
                         <tr class="">
-                            <td scope="row"><?php  echo $registro['id'];?></td>
-                            <td><?php  echo $registro['primernombre'];?>
-                                <?php  echo $registro['segundonombre'];?>
+                            <td scope="row">
+                                <?php echo $registro['id']; ?>
                             </td>
-                            
-                            <td><?php  echo $registro['primerapellido'];?>
-                                <?php  echo $registro['segundoapellido'];?>
+                            <td>
+                                <?php echo $registro['primernombre']; ?>
+                                <?php echo $registro['segundonombre']; ?>
                             </td>
-                            
-                            <td><?php  echo $registro['foto'];?></td>
-                            <td><?php  echo $registro['cv'];?></td>
-                            <td><?php  echo $registro['puesto'];?></td> <!-- como puesto. Gracias a la subconsulta -->
-                            <td><?php  echo $registro['fechadeingreso'];?></td>
+
+                            <td>
+                                <?php echo $registro['primerapellido']; ?>
+                                <?php echo $registro['segundoapellido']; ?>
+                            </td>
+
+                            <td>
+                                <img width="50" src="<?php echo $registro['foto']; ?>" class="img-fluid rounded" alt="">
+                            </td>
+                            <td>
+                                <?php echo $registro['cv']; ?>
+                            </td>
+                            <td>
+                                <?php echo $registro['puesto']; ?>
+                            </td> <!-- como puesto. Gracias a la subconsulta -->
+                            <td>
+                                <?php echo $registro['fechadeingreso']; ?>
+                            </td>
 
                             <!-- <td>Programador sr</td> -->
                             <td>
                                 <!-- <a name="" id="btneditar" class="btn btn-info" href="editar.php" role="button">Editar</a> -->
                                 <a class="btn btn-primary" href="#" role="button">Carta</a>
-                                <a class="btn btn-primary" href="editar.php?txtID=<?php  echo $registro['id']; ?>" role="button">Editar</a>
-                                <a class="btn btn-danger" href="index.php?txtID=<?php  echo $registro['id']; ?>" role="button">Eliminar</a>
+                                <a class="btn btn-primary" href="editar.php?txtID=<?php echo $registro['id']; ?>"
+                                    role="button">Editar</a>
+                                <a class="btn btn-danger" href="index.php?txtID=<?php echo $registro['id']; ?>"
+                                    role="button">Eliminar</a>
                             </td>
                         </tr>
                     <?php } ?>
                 </tbody>
             </table>
         </div>
-        
+
     </div>
 </div>
-<?php include("../../templates/footer.php");?>
+<?php include("../../templates/footer.php"); ?>

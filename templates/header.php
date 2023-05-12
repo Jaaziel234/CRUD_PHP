@@ -20,10 +20,10 @@ $url_base="http://localhost/APPWEB/";
   <header>
     <!-- place navbar here -->
   </header>
-  <nav class="navbar navbar-expand navbar-dark bg-dark">
+  <nav class="navbar navbar-expand navbar-dark bg-primary">
         <ul class="nav navbar-nav">
             <li class="nav-item">
-                <a class="nav-link active" href="../../index.php" aria-current="page">CODIGOZOOM<span class="visually-hidden">(current)</span></a>
+                <a class="nav-link active" href="#" aria-current="page">CODIGOZOOM<span class="visually-hidden">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="<?php echo $url_base;?>secciones/empleados/">Empleados</a> <!-- con $url_base aplicamos una URL absoluta -->
